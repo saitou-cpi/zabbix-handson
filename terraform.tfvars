@@ -1,0 +1,7 @@
+project = "zabbix-handson"
+user    = "＜YOUR_NAME＞"
+myip    = "＜YOUR_IP_ADDRESS＞"
+region  = "ap-southeast-1"
+az_1a   = "ap-southeast-1a"
+az_1c   = "ap-southeast-1c"
+keypair = "＜YOUR_AWS_KEYPAIR＞"
