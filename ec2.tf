@@ -2,8 +2,8 @@
 # EC2 Instance
 # ---------------------------
 resource "aws_instance" "master" {
-  ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "m5.large"
+  ami                         = data.aws_ami.ubuntu_2404.id
+  instance_type               = "m5.xlarge"
   subnet_id                   = aws_subnet.public_subnet_1a.id
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
@@ -12,7 +12,7 @@ resource "aws_instance" "master" {
   ]
 
   root_block_device {
-    volume_size = 30
+    volume_size = 40
     volume_type = "gp3"
     tags = {
       Name = "${var.project}-master-root-volume"

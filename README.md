@@ -7,7 +7,6 @@
 * internet gateway
 * EC2
 * security group(for EC2)
-* security group(for RDS)
 
 ## 使う前に
 terraformを実行する前に、"terraform.tfvars"を編集する。
