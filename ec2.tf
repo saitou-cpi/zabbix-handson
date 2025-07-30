@@ -77,6 +77,33 @@ resource "aws_instance" "master" {
 
 }
 
+resource "aws_instance" "host" {
+  ami                         = data.aws_ami.ubuntu_2404.id
+  instance_type               = "m5.large"
+  subnet_id                   = aws_subnet.public_subnet_1a.id
+  associate_public_ip_address = true
+  iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
+  vpc_security_group_ids = [
+    aws_security_group.ec2_sg.id
+  ]
+
+  root_block_device {
+    volume_size = 40
+    volume_type = "gp3"
+    tags = {
+      Name = "${var.project}-host-root-volume"
+      User = var.user
+    }
+  }
+
+  key_name = var.keypair
+
+  tags = {
+    Name = "${var.project}-host-ec2"
+    User = var.user
+  }
+}
+
 output "master_public_ips" {
   description = "Public IP address of master-ec2"
   value       = aws_instance.master.public_ip
@@ -85,4 +112,15 @@ output "master_public_ips" {
 output "master_private_ips" {
   description = "Private IP address of master-ec2"
   value       = aws_instance.master.private_ip
+}
+
+
+output "host_public_ips" {
+  description = "Public IP address of host-ec2"
+  value       = aws_instance.host.public_ip
+}
+
+output "host_private_ips" {
+  description = "Private IP address of host-ec2"
+  value       = aws_instance.host.private_ip
 }
