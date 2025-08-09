@@ -102,6 +102,29 @@ resource "aws_instance" "host" {
     Name = "${var.project}-host-ec2"
     User = var.user
   }
+  user_data = <<-EOF
+    #!/bin/bash
+    set -eux
+    
+    LOG=/var/log/user-data.log
+    exec > >(tee -a "$LOG") 2>&1
+    
+    echo "[$(date)] ==== Start User Data Script ===="
+    
+    echo "[$(date)] Downloading Zabbix repo package..."
+    wget -q https://repo.zabbix.com/zabbix/7.4/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.4+ubuntu24.04_all.deb
+    
+    echo "[$(date)] Installing Zabbix repo package..."
+    dpkg -i zabbix-release_latest_7.4+ubuntu24.04_all.deb
+    
+    echo "[$(date)] Updating apt cache..."
+    apt-get update -y
+    
+    echo "[$(date)] Installing core packages..."
+    apt-get install -y zabbix-agent2
+
+    echo "[$(date)] ==== User Data Script Completed Successfully ===="
+  EOF
 }
 
 output "master_public_ips" {
